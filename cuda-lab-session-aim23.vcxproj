@@ -80,11 +80,11 @@
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="helpers\matrix_helper.h" />
+    <ClInclude Include="helpers\helper.h" />
     <ClInclude Include="helpers\Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="helpers\matrix_helper.cpp">
+    <ClCompile Include="helpers\helper.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>

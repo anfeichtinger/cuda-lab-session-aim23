@@ -14,17 +14,9 @@ public:
     // Stops the timer and prints the elapsed time
     void stop() const
     {
-        const auto stop_time = std::chrono::high_resolution_clock::now();
-        const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop_time - start_time_).count();
-
-        if (duration >= 1000)
-        {
-            std::cout << duration / 1000.0 << " seconds" << "\n";
-        }
-        else
-        {
-            std::cout << duration << " milliseconds" << "\n";
-        }
+        const std::chrono::high_resolution_clock::time_point end_time = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> elapsed = end_time - start_time_;
+        std::cout << elapsed.count() << " seconds" << '\n';
     }
 
 private:
