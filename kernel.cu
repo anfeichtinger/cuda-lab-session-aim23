@@ -16,14 +16,7 @@ void matrix_add_cpu(const std::vector<float>& a, const std::vector<float>& b, st
 }
 
 // Device Matrix Addition.
-__global__ void matrix_add_gpu(const float* a, const float* b, float* c, const int size)
-{
-    const int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < size)
-    {
-        c[idx] = a[idx] + b[idx];
-    }
-}
+// Todo: add cuda kernel with name matrix_add_gpu
 
 // Define our workload. You can play around with the matrix size to change the execution time.
 constexpr int matrix_size = 32 * 512;
@@ -56,39 +49,20 @@ int main()
     matrix_add_cpu(host_a, host_b, host_c, matrix_elements);
     timer.stop();
 
-    // Allocate matrices on the device.
-    std::cout << "Device Speed with overhead: ";
-    timer.start();
-    float *device_a, *device_b, *device_c;
-    cudaMalloc(&device_a, matrix_elements * sizeof(float));
-    cudaMalloc(&device_b, matrix_elements * sizeof(float));
-    cudaMalloc(&device_c, matrix_elements * sizeof(float));
+    // Todo: Allocate matrices on the device.
 
-    // Copy the actual data to device.
-    cudaMemcpy(device_a, host_a.data(), matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(device_b, host_b.data(), matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
+    // Todo: Copy the host data to device.
 
     // Determine the distribution on the device. Should not use more than 256 threads per block.
-    int threads_per_block = 256;
+    constexpr int threads_per_block = 256;
     int blocks_per_grid = matrix_elements / threads_per_block;
 
-    // The execution speed on the device with memory copying overhead.
-    matrix_add_gpu<<<blocks_per_grid, threads_per_block>>>(device_a, device_b, device_c, matrix_elements);
-    cudaDeviceSynchronize();
-    cudaMemcpy(host_c.data(), device_c, matrix_elements, cudaMemcpyDeviceToHost);
-    timer.stop();
-
-    // The raw execution speed on the device.
     std::cout << "Device Speed: ";
-    timer.start();
-    matrix_add_gpu<<<blocks_per_grid, threads_per_block>>>(device_a, device_b, device_c, matrix_elements);
-    cudaDeviceSynchronize();
-    timer.stop();
+    // Todo: Measure the execution speed on the device.
 
-    // Freeing the reserved memory on the device.
-    cudaFree(device_a);
-    cudaFree(device_b);
-    cudaFree(device_c);
+    // Todo: Copy the result from the device to the host.
+
+    // Todo: Free the reserved memory on the device.
 
     return 0;
 }
