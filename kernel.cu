@@ -65,8 +65,8 @@ int main()
     cudaMalloc(&device_c, matrix_elements * sizeof(float));
 
     // Copy the actual data to device.
-    cudaMemcpy(device_a, &host_a, matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
-    cudaMemcpy(device_b, &host_b, matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(device_a, host_a.data(), matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(device_b, host_b.data(), matrix_elements * sizeof(float), cudaMemcpyHostToDevice);
 
     // Determine the distribution on the device. Should not use more than 256 threads per block.
     int threads_per_block = 256;
@@ -75,7 +75,7 @@ int main()
     // The execution speed on the device with memory copying overhead.
     matrix_add_gpu<<<blocks_per_grid, threads_per_block>>>(device_a, device_b, device_c, matrix_elements);
     cudaDeviceSynchronize();
-    cudaMemcpy(&host_c, device_c, matrix_elements, cudaMemcpyDeviceToHost);
+    cudaMemcpy(host_c.data(), device_c, matrix_elements, cudaMemcpyDeviceToHost);
     timer.stop();
 
     // The raw execution speed on the device.
